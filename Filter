@@ -1,0 +1,52 @@
+#include <stdio.h>
+
+#define ROW 5
+#define COL 5
+#define KERNEL_SIZE 3
+
+void convolve(int input[][COL], int output[][COL], int height, int width, int kernel[][KERNEL_SIZE], int kernel_size, int padding) {
+    int i, j, m, n, sum;
+    for (i = padding; i < height+padding; i++) {
+        for (j = padding; j < width+padding; j++) {
+            sum = 0;
+            for (m = 0; m < kernel_size; m++) {
+                for (n = 0; n < kernel_size; n++) {
+                    sum += input[i+m-padding][j+n-padding] * kernel[m][n];
+                }
+            }
+            output[i-padding][j-padding] = sum;
+        }
+    }
+}
+
+int main() {
+    int input[ROW][COL] = {
+        { 1, 2, 3, 4, 5 },
+        { 6, 7, 8, 9, 10 },
+        { 11, 12, 13, 14, 15 },
+        { 16, 17, 18, 19, 20 },
+        { 21, 22, 23, 24, 25 }
+    };
+    int output[ROW][COL], kernel[KERNEL_SIZE][KERNEL_SIZE] = {
+        { 1, 1, 1 },
+        { 1, 1, 1 },
+        { 1, 1, 1 }
+    };
+    int height = ROW, width = COL, padding = 1; // 以1为半径填充
+    convolve(input, output, height, width, kernel, KERNEL_SIZE, padding);
+    printf("Input:\n");
+    for (int i = 0; i < ROW; i++) {
+        for (int j = 0; j < COL; j++) {
+            printf("%d ", input[i][j]);
+        }
+        printf("\n");
+    }
+    printf("\nOutput:\n");
+    for (int i = 0; i < ROW; i++) {
+        for (int j = 0; j < COL; j++) {
+            printf("%d ", output[i][j]);
+        }
+        printf("\n");
+    }
+    return 0;
+}
